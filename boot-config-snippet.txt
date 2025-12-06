@@ -1,0 +1,9 @@
+# -------- FORCE HDMI AUDIO --------
+# Force HDMI even if no monitor is detected.
+hdmi_force_hotplug=1
+
+# Use HDMI mode instead of DVI, enabling audio over HDMI.
+hdmi_drive=2
+
+# Increase HDMI signal strength (7 is a safe mid value for longer cables).
+config_hdmi_boost=7
