@@ -1,0 +1,32 @@
+[Unit]
+# A human-readable description of this service.
+Description=GPIO Smart Power Button
+
+# Start this service after the system reaches multi-user.target (non-graphical).
+After=multi-user.target
+
+# Indicate that this service wants multi-user.target active.
+Wants=multi-user.target
+
+[Service]
+# Simple service: systemd considers it started as soon as the process starts.
+Type=simple
+
+# Run the script as root user (required for shutdown/reboot commands).
+User=root
+
+# Run with group 'gpio' to allow GPIO access if needed.
+Group=gpio
+
+# Wait 2 seconds before starting the script (to let system settle).
+ExecStartPre=/bin/sleep 2
+
+# Command to start the Python script that handles the GPIO button.
+ExecStart=/usr/bin/python3 /home/vinay/gpio-shutdown.py
+
+# Automatically restart the service if it crashes or exits.
+Restart=always
+
+[Install]
+# Start this service when entering multi-user.target (normal console boot).
+WantedBy=multi-user.target
