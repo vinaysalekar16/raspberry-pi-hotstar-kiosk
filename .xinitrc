@@ -16,9 +16,8 @@ xset s noblank
 
 # Start Chromium in full-screen kiosk mode and open Hotstar home.
 # "exec" replaces the current shell with chromium-browser process.
-exec chromium-browser \
+exec chromium \
   --kiosk \                           # Full-screen kiosk mode (no window decorations)
-  "https://www.hotstar.com/in/home" \ # URL to open on startup
   --noerrdialogs \                    # Suppress error dialogs
   --disable-infobars \                # Hide 'Chrome is being controlled' info bar
   --disable-features=TranslateUI \    # Disable built-in translate popup
@@ -26,4 +25,5 @@ exec chromium-browser \
   --autoplay-policy=document-user-activation-required \     # Control autoplay policy
   --disable-background-media-suspend \                      # Keep media running in background
   --disable-backgrounding-occluded-windows \                # Prevent throttling when window not visible
-  --disable-features=MediaSessionService                    # Disable certain media session features
+  --disable-features=MediaSessionService \                # Disable certain media session features
+  https://www.hotstar.com/in/home # URL to open on startup
