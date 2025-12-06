@@ -31,7 +31,7 @@ Note: GPIO3 is convenient because it can also wake the Pi from halt on some mode
 ## 2. Software Requirements
 
 - Raspberry Pi OS with:
-  - `chromium-browser`
+  - `chromium`
   - `xserver-xorg`, `xinit`
 - Python 3
 - `python3-rpi.gpio` package
@@ -40,4 +40,4 @@ Install typical dependencies:
 
 ```bash
 sudo apt update
-sudo apt install -y chromium-browser xserver-xorg xinit python3-rpi.gpio
+sudo apt install -y chromium xserver-xorg xinit python3-rpi.gpio
