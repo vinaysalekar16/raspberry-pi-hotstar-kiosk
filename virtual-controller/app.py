@@ -62,7 +62,7 @@ def mouse_move():
     data = request.get_json(force=True)
     dx = int(data.get("dx", 0))
     dy = int(data.get("dy", 0))
-    subprocess.call(["xdotool", "mousemove_relative", "--", str(dx), str(d>
+    subprocess.call(["xdotool", "mousemove_relative", "--", str(dx), str(dy)])
     return "OK"
 
 @app.route("/mouse_click", methods=["POST"])
