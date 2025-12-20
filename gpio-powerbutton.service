@@ -1,12 +1,13 @@
 [Unit]
+#sudo nano /etc/systemd/system/gpio-powerbutton.service
 # A human-readable description of this service.
-Description=GPIO Smart Power Button
+Description=GPIO Smart Power Button + Raspberry Pi Kiosk Controller
 
 # Start this service after the system reaches multi-user.target (non-graphical).
-After=multi-user.target
+After=network.target multi-user.target
 
 # Indicate that this service wants multi-user.target active.
-Wants=multi-user.target
+Wants=network.target multi-user.target
 
 [Service]
 # Simple service: systemd considers it started as soon as the process starts.
@@ -18,14 +19,26 @@ User=root
 # Run with group 'gpio' to allow GPIO access if needed.
 Group=gpio
 
+#this will tell the display
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/vinay/.Xauthority
+
 # Wait 2 seconds before starting the script (to let system settle).
 ExecStartPre=/bin/sleep 2
 
 # Command to start the Python script that handles the GPIO button.
-ExecStart=/usr/bin/python3 /home/vinay/gpio-shutdown.py
+#ExecStart=/usr/bin/python3 /home/vinay/gpio-shutdown.py
+
+# Run both processes using bash -c (clean way to run multiple commands)
+ExecStart=/bin/bash -c '\
+    /usr/bin/python3 /home/vinay/gpio-shutdown.py & \
+    /home/vinay/kiosk-control/kiosk-venv/bin/python3 /home/vinay/kiosk-control/app.py \
+'
+
 
 # Automatically restart the service if it crashes or exits.
 Restart=always
+RestartSec=3
 
 [Install]
 # Start this service when entering multi-user.target (normal console boot).
