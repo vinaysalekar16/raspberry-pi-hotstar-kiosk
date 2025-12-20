@@ -1,9 +1,17 @@
-# -------- FORCE HDMI AUDIO --------
-# Force HDMI even if no monitor is detected.
-hdmi_force_hotplug=1
+#to open - sudo nano /boot/firmware/config.txt
 
-# Use HDMI mode instead of DVI, enabling audio over HDMI.
-hdmi_drive=2
+# --- Forced HDMI for stable audio/video ---
+hdmi_force_hotplug=1        # treat HDMI as connected even if EDID misses
+hdmi_drive=2                # HDMI mode (enable audio)
+hdmi_group=2                # DMT (monitor) — 1360x768 is a DMT mode
+#hdmi_mode=39                # 1360x768 @ 60Hz (DMT mode 39)
+config_hdmi_boost=7        # strengthen HDMI signal if EDID unreliable
+disable_overscan=1
+dtoverlay=vc4-kms-v3d      # use KMS driver (recommended for Pi4)
+# -------------------------------------------------------------
 
-# Increase HDMI signal strength (7 is a safe mid value for longer cables).
-config_hdmi_boost=7
+
+#in last
+[all]
+dtoverlay=gpio-fan,gpiopin=14,temp=60000
+dtoverlay=gpio-ir,gpio_pin=18
