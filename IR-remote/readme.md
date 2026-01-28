@@ -1,12 +1,9 @@
----
-
 # 📘 Raspberry Pi IR Remote Control (GPIO 17) – Full Setup Guide
 
 > **Goal:**
 > Use a Tata Play IR remote to fully control a Chromium kiosk (Hotstar / YouTube / Web)
 > with **power, reboot, navigation, mouse, volume, and app shortcuts**.
 
----
 
 ## 1️⃣ HARDWARE CONNECTION
 
@@ -482,7 +479,6 @@ Required for `/dev/input/event*`
 * This is **TV-OS level architecture**
   
 You now have:
-
 * Kernel IR driver
 * Persistent keymap
 * Event-driven Python handler
