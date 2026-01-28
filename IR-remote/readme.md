@@ -1,10 +1,3 @@
-🔥 Respect. You didn’t just “make it work” — you **built a real IR → TV-style control system**.
-
-Below is a **clean, battle-tested README** you can reuse **anytime**, on a fresh Raspberry Pi, **without touching any of the junk we discarded**.
-
-This is **GPIO IR (gpio_ir_recv) + ir-keytable + Python (evdev + xdotool)**
-No LIRC mess. No raw pulse math. No deprecated tools.
-
 ---
 
 # 📘 Raspberry Pi IR Remote Control (GPIO 17) – Full Setup Guide
@@ -299,7 +292,154 @@ sudo python3 ~/ir_control.py
 
 ## 🔁 AUTOSTART ON BOOT (OPTIONAL)
 
-Create systemd service if needed later.
+Perfect final step.
+
+Below is **clean, correct, reboot-safe**
+
+---
+
+# 🚀 CREATE SYSTEMD SERVICE FOR IR CONTROL (AUTO START)
+
+This will:
+
+* Start your IR Python script **at boot**
+* Run it **with root** (required for input devices)
+* Restart automatically if it crashes
+* Work with X / Chromium / kiosk
+
+---
+
+## 1️⃣ VERIFY SCRIPT PATH & PERMISSIONS
+
+Your script is here:
+
+```
+/home/vinay/ir_control.py
+```
+
+Make it executable (not mandatory, but clean):
+
+```bash
+chmod +x /home/vinay/ir_control.py
+```
+
+---
+
+## 2️⃣ CREATE SYSTEMD SERVICE FILE
+
+```bash
+sudo nano /etc/systemd/system/ir-control.service
+```
+
+### 📄 Paste THIS EXACT FILE
+
+```ini
+[Unit]
+Description=IR Remote Control Service (GPIO 17)
+After=graphical.target
+Wants=graphical.target
+
+[Service]
+Type=simple
+User=root
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/vinay/.Xauthority
+ExecStart=/usr/bin/python3 /home/vinay/ir_control.py
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=graphical.target
+```
+
+Save & exit.
+
+---
+
+## 3️⃣ RELOAD SYSTEMD
+
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+```
+
+---
+
+## 4️⃣ ENABLE SERVICE (BOOT SURVIVE)
+
+```bash
+sudo systemctl enable ir-control.service
+```
+
+---
+
+## 5️⃣ START IT NOW (NO REBOOT NEEDED)
+
+```bash
+sudo systemctl start ir-control.service
+```
+
+---
+
+## 6️⃣ VERIFY STATUS (VERY IMPORTANT)
+
+```bash
+sudo systemctl status ir-control.service
+```
+
+You should see:
+
+```
+Active: active (running)
+```
+
+No errors. No loops.
+
+---
+
+## 7️⃣ CHECK LOGS (DEBUG IF NEEDED)
+
+```bash
+journalctl -u ir-control.service -f
+```
+
+Press remote buttons — you’ll see:
+
+```
+KEY: KEY_UP
+KEY: KEY_OK
+KEY: KEY_RED
+```
+
+This confirms:
+
+* IR input ✔
+* Python running ✔
+* Service stable ✔
+
+---
+
+## 🧠 WHY THIS SERVICE FILE IS CORRECT
+
+### `After=graphical.target`
+
+Ensures X server + Chromium exist
+
+### `Environment=DISPLAY=:0`
+
+Required for xdotool
+
+### `XAUTHORITY`
+
+Allows root to control user GUI
+
+### `Restart=always`
+
+If script crashes → auto restart
+
+### `User=root`
+
+Required for `/dev/input/event*`
 
 ---
 
@@ -340,5 +480,13 @@ Create systemd service if needed later.
 * **No raw IR pulses**
 * **Kernel → evdev → xdotool → browser**
 * This is **TV-OS level architecture**
+  
+You now have:
+
+* Kernel IR driver
+* Persistent keymap
+* Event-driven Python handler
+* GUI control
+* **Boot-persistent service**
 
 ---
