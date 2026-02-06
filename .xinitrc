@@ -35,7 +35,7 @@ exec chromium \
   --disable-sync \
   --no-first-run \
   --fast-start \
-  https://www.hotstar.com/in/onboarding/device-restriction?ref=%2Fin%2Fmypage # URL to open on startup
-  https://www.youtube.com/results?search_query=abp+maza+live+
+  https://www.hotstar.com/in/onboarding/device-restriction?ref=%2Fin%2Fmypage \ # URL to open on startup
+  https://www.youtube.com/results?search_query=abp+maza+live+ \
   https://www.google.com
 
