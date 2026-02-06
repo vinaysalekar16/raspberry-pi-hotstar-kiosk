@@ -3,6 +3,8 @@
 
 # ---------- Prevent screen blank ----------
 
+set -e
+
 # Disable DPMS (Energy Star) features so the screen doesn't power down.
 xset -dpms
 
@@ -14,19 +16,26 @@ xset s noblank
 
 # ---------- Launch Hotstar Kiosk ----------
 
-# Start Chromium in full-screen kiosk mode and open Hotstar home.
-# "exec" replaces the current shell with chromium-browser process.
-exec chromium --kiosk \                           # Full-screen kiosk mode (no window decorations)
-  --remote-debugging-port=9222 \
-  --remote-allow-origins=http://127.0.0.1:9222 \
-  --noerrdialogs \                    # Suppress error dialogs
-  --disable-infobars \                # Hide 'Chrome is being controlled' info bar
-  --disable-features=TranslateUI \    # Disable built-in translate popup
-  --start-maximized \                 # Start maximized (for safety with kiosk)
-  --disable-features=MediaEngagementBypassAutoplayPolicies,MediaSessionService,PreloadMediaEngagementData \
-  --autoplay-policy=document-user-activation-required \     # Control autoplay policy
-  --disable-background-media-suspend \                      # Keep media running in background
-  --disable-backgrounding-occluded-windows \                # Prevent throttling when window not visible
-  --disable-features=MediaSessionService \                # Disable certain media session features
-  --site-per-process \
- https://www.hotstar.com/in/onboarding/device-restriction?ref=%2Fin%2Fmypage # URL to open on startup
+openbox &
+
+sleep 2
+
+exec chromium \
+  --kiosk \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-session-crashed-bubble \
+  --disable-translate \
+  --disable-features=TranslateUI \
+  --start-fullscreen \
+  --no-sandbox \
+  --disable-gpu \
+  --disable-dev-shm-usage \
+  --disable-background-networking \
+  --disable-sync \
+  --no-first-run \
+  --fast-start \
+  https://www.hotstar.com/in/onboarding/device-restriction?ref=%2Fin%2Fmypage # URL to open on startup
+  https://www.youtube.com/results?search_query=abp+maza+live+
+  https://www.google.com
+
